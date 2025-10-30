@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bài 2 – Sự xác lập và phát triển của chủ nghĩa tư bản</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background: #f4f6f9;
+        margin: 20px;
+        color: #222;
+      }
+      h1 {
+        text-align: center;
+        color: #2c3e50;
+      }
+      .question {
+        background: #fff;
+        border-radius: 10px;
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+        padding: 15px;
+        margin-bottom: 15px;
+      }
+      .correct {
+        background-color: #d4edda;
+      }
+      .wrong {
+        background-color: #f8d7da;
+      }
+      button {
+        background: #007bff;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        padding: 10px 15px;
+        margin: 10px 5px;
+        cursor: pointer;
+        font-size: 16px;
+      }
+      button:hover {
+        background: #0056b3;
+      }
+      .answer {
+        font-weight: bold;
+        color: #155724;
+        display: none;
+      }
+      #gg {
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <h1 id="gg"><a href="../index.html">quay về</a></h1>
+    <h1>Bài 2: Sự xác lập và phát triển của chủ nghĩa tư bản</h1>
+
+    <form id="quizForm">
+      <!-- Câu hỏi -->
+      <div id="questions"></div>
+
+      <button type="button" onclick="checkAnswers()">Nộp bài</button>
+      <button type="button" onclick="resetQuiz()">Làm lại</button>
+    </form>
+
+    <script>
+      // Danh sách câu hỏi + đáp án
+      const quizData = [
+        {
+          q: "Câu 6. Một trong những đặc điểm cơ bản của chủ nghĩa tư bản hiện đại là",
+          options: [
+            "A. bước đầu xuất khẩu tư bản.",
+            "B. xuất hiện độc quyền nhà nước.",
+            "C. bước đầu xâm lược thuộc địa.",
+            "D. xuất hiện tư bản tài chính.",
+          ],
+          correct: "D",
+        },
+        {
+          q: "Câu 7. Sự xác lập của chủ nghĩa tư bản ở châu Âu và Bắc Mĩ thế kỉ XVII – XIX có điểm chung là",
+          options: [
+            "A. thiết lập chế độ quân chủ lập hiến.",
+            "B. thiết lập chế độ cộng hòa.",
+            "C. lật đổ chế độ thực dân.",
+            "D. do giai cấp tư sản lãnh đạo",
+          ],
+          correct: "D",
+        },
+        {
+          q: "Câu 8. Các nước tư bản hiện đại tiêu biểu là",
+          options: [
+            "A. Mĩ, Anh, Trung Quốc.",
+            "B. Mĩ, Nhật, Cu Ba.",
+            "C. Mĩ, Nhật, Đức.",
+            "D. Mĩ, Nhật, Trung Quốc.",
+          ],
+          correct: "C",
+        },
+        {
+          q: "Câu 9. Sự khác biệt giữa chủ nghĩa tư bản tự do cạnh tranh và chủ nghĩa tư bản độc quyền xuất phát từ",
+          options: [
+            "A. sự phát triển kinh tế và công nghiệp.",
+            "B. Sự cạnh tranh và chiến lược kinh doanh.",
+            "C. Sự bất ổn định, phân hóa giàu nghèo.",
+            "D. Sự tập trung tài sản và quyền lực.",
+          ],
+          correct: "D",
+        },
+        {
+          q: "Câu 10. Từ đầu thế kỉ XIX, các nước tư bản phương Tây đã tăng cường",
+          options: [
+            "A. hợp tác và mở rộng đầu tư.",
+            "B. thu hút vốn đầu tư bên ngoài.",
+            "C. xâm lược và mở rộng thuộc địa.",
+            "D. đổi mới hình thức kinh doanh.",
+          ],
+          correct: "C",
+        },
+        {
+          q: "Câu 11. Cuối thế kỉ XIX – đầu thế kỉ XX, các nước tư bản chủ nghĩa đã chuyển sang giai đoạn",
+          options: [
+            "A. tự do cạnh tranh.",
+            "B. cải cách đất nước.",
+            "C. đế quốc chủ nghĩa.",
+            "D. chủ nghĩa phát xít.",
+          ],
+          correct: "C",
+        },
+        {
+          q: "Câu 12. Chủ nghĩa đế quốc ra đời từ cuối thế kỉ XIX đầu thế kỉ XX là hệ quả trực tiếp của quá trình",
+          options: [
+            "A. xâm lược thuộc địa.",
+            "B. giao lưu buôn bán.",
+            "C. toàn cầu hóa.",
+            "D. hợp tác kinh tế.",
+          ],
+          correct: "A",
+        },
+        {
+          q: "Câu 13. Các nước đế quốc chủ nghĩa đã thiết lập hệ thống thuộc địa rộng khắp ở",
+          options: [
+            "A. châu Âu, châu Mỹ và khu vực Tây Âu.",
+            "B. châu Âu, châu Úc và khu vực Bắc Mỹ.",
+            "C. châu Á, châu Phi và khu vực Mỹ La-tinh.",
+            "D. châu Mỹ, Tây Âu và khu vực Đông Âu.",
+          ],
+          correct: "C",
+        },
+        {
+          q: "Câu 14. Đầu thế kỉ XX, quốc gia nào có hệ thống thuộc địa rộng lớn nhất?",
+          options: ["A. Đức.", "B. I-ta-li-a.", "C. Nhật.", "D. Anh."],
+          correct: "D",
+        },
+        {
+          q: "Câu 15. Các tổ chức độc quyền ra đời là kết quả của sự liên minh giữa",
+          options: [
+            "A. vô sản và tư sản.",
+            "B. chủ nô và tư sản.",
+            "C. các nhà tư bản lớn.",
+            "D. địa chủ và quý tộc.",
+          ],
+          correct: "C",
+        },
+        {
+          q: "Câu 16. Sự kiện đánh dấu sự mở rộng của chủ nghĩa tư bản ra ngoài châu Âu là",
+          options: [
+            "A. Chiến tranh giành độc lập của 13 thuộc địa Anh ở Bắc Mỹ.",
+            "B. Phong trào đấu tranh giành độc lập ở khu vực Mỹ La-tinh.",
+            "C. Cuộc vận động thống nhất nước Đức và I-ta-li-a.",
+            "D. Cải cách nông nô ở Nga và cuộc nội chiến ở Mỹ.",
+          ],
+          correct: "A",
+        },
+        {
+          q: "Câu 17. Một trong những thách thức của chủ nghĩa tư bản hiện đại là",
+          options: [
+            "A. Nguồn nhân công ngày càng cạn kiệt.",
+            "B. Giao lưu kinh tế quốc tế ngày càng tăng.",
+            "C. Mâu thuẫn xã hội ngày càng gia tăng.",
+            "D. Sự ra đời các tổ chức liên kết khu vực.",
+          ],
+          correct: "C",
+        },
+        {
+          q: "Câu 18. Chính sách xâm lược và mở rộng thuộc địa của các nước tư bản nhằm mục đích",
+          options: [
+            "A. phát triển khoa học – kĩ thuật.",
+            "B. giải quyết tình trạng thất nghiệp.",
+            "C. thu hút nguồn vốn đầu tư bên ngoài.",
+            "D. nguyên liệu và nguồn nhân công.",
+          ],
+          correct: "D",
+        },
+        {
+          q: "Câu 19. Nước Anh được mệnh danh là “đế quốc mà Mặt Trời không bao giờ lặn” vì",
+          options: [
+            "A. Nước Anh luôn phải đối mặt với nạn ngoại xâm.",
+            "B. Nước Anh có hệ thống thuộc địa rộng khắp thế giới.",
+            "C. Nguồn vốn đầu tư của nước Anh trải khắp toàn cầu.",
+            "D. Các nước đế quốc tranh nhau đầu tư vào Anh.",
+          ],
+          correct: "B",
+        },
+        {
+          q: "Câu 29. Một trong những đặc điểm nổi bật của chủ nghĩa tư bản độc quyền là",
+          options: [
+            "A. công ty xuyên quốc gia.",
+            "B. tổ chức độc quyền.",
+            "C. tổ chức liên kết khu vực.",
+            "D. tổ chức liên kết quốc tế.",
+          ],
+          correct: "B",
+        },
+        {
+          q: "Câu 30. Lĩnh vực tiềm năng phát triển của chủ nghĩa tư bản hiện đại là",
+          options: [
+            "A. Chạy đua vũ trang.",
+            "B. Sự bình đẳng xã hội.",
+            "C. Cơ cấu giai cấp xã hội.",
+            "D. Khoa học – công nghệ.",
+          ],
+          correct: "D",
+        },
+        {
+          q: "Câu 31. Cơ sở cho bước chuyển biến từ tự do cạnh tranh sang độc quyền là",
+          options: [
+            "A. Quá trình hợp tác ở các nước tư bản.",
+            "B. Sự phát triển của các tổ chức độc quyền.",
+            "C. Nhiều trung tâm kinh tế – tài chính ra đời.",
+            "D. Sự ra đời nhiều tổ chức liên kết khu vực.",
+          ],
+          correct: "B",
+        },
+        {
+          q: "Câu 32. Nội dung không đúng về chủ nghĩa tư bản độc quyền là",
+          options: [
+            "A. Sự tập trung sản xuất và tư bản ở mức cao.",
+            "B. Xuất khẩu tư bản đóng vai trò quan trọng.",
+            "C. Đầu tư, hợp tác với các nước đang phát triển.",
+            "D. Tăng cường phân chia lãnh thổ thế giới.",
+          ],
+          correct: "C",
+        },
+        {
+          q: "Câu 33. Trình tự phát triển của chủ nghĩa tư bản là",
+          options: [
+            "A. Tự do cạnh tranh → Độc quyền → Hiện đại.",
+            "B. Độc quyền → Hiện đại → Tự do cạnh tranh.",
+            "C. Tự do cạnh tranh → Hiện đại → Độc quyền.",
+            "D. Hiện đại → Độc quyền → Tự do cạnh tranh.",
+          ],
+          correct: "A",
+        },
+        {
+          q: "Câu 34. Một đặc trưng của chủ nghĩa tư bản hiện đại là",
+          options: [
+            "A. Dung hợp tư bản ngân hàng với tư bản công nghiệp.",
+            "B. Xuất hiện các tổ chức độc quyền có vai trò quyết định.",
+            "C. Lực lượng lao động chuyển biến mạnh về cơ cấu.",
+            "D. Các cường quốc tư bản đã chia xong thế giới.",
+          ],
+          correct: "C",
+        },
+        {
+          q: "Câu 1. Chủ nghĩa tư bản hiện đại là thuật ngữ chỉ giai đoạn",
+          options: [
+            "A. Tự do cạnh tranh.",
+            "B. Bắt đầu sang giai đoạn độc quyền.",
+            "C. Sau chiến tranh thế giới thứ II.",
+            "D. Sau chiến tranh thế giới thứ I.",
+          ],
+          correct: "C",
+        },
+        {
+          q: "Câu 2. Chủ nghĩa đế quốc ra đời là hệ quả của các hoạt động",
+          options: [
+            "A. Xâm lược thuộc địa.",
+            "B. Giao lưu buôn bán.",
+            "C. Toàn cầu hóa.",
+            "D. Hợp tác kinh tế.",
+          ],
+          correct: "A",
+        },
+        {
+          q: "Câu 4. Một trong những thách thức của chủ nghĩa tư bản hiện đại là",
+          options: [
+            "A. Nguồn nhân công ngày càng cạn kiệt.",
+            "B. Giao lưu kinh tế quốc tế ngày càng tăng.",
+            "C. Mâu thuẫn xã hội ngày càng gia tăng.",
+            "D. Sự ra đời các tổ chức liên kết khu vực.",
+          ],
+          correct: "C",
+        },
+        {
+          q: "Câu 3. Lĩnh vực tiềm năng phát triển của chủ nghĩa tư bản hiện đại là",
+          options: [
+            "A. Chạy đua vũ trang.",
+            "B. Sự bình đẳng xã hội.",
+            "C. Cơ cấu giai cấp xã hội.",
+            "D. Khoa học – công nghệ.",
+          ],
+          correct: "D",
+        },
+        {
+          q: "Câu 4. Chủ nghĩa tư bản được xác lập đầu tiên trên thế giới ở",
+          options: [
+            "A. Châu Âu và Bắc Mĩ.",
+            "B. Tây Âu và Châu Á.",
+            "C. Bắc Mĩ và Nam Á.",
+            "D. Châu Á và Châu Phi.",
+          ],
+          correct: "A",
+        },
+      ];
+
+      // Sinh câu hỏi ra HTML
+      const container = document.getElementById("questions");
+      quizData.forEach((item, index) => {
+        const div = document.createElement("div");
+        div.classList.add("question");
+        div.id = "q" + (index + 1);
+        div.innerHTML = `
+        <p>${item.q}</p>
+        ${item.options
+          .map(
+            (opt) =>
+              `<label><input type="radio" name="q${
+                index + 1
+              }" value="${opt.charAt(0)}"> ${opt}</label><br>`
+          )
+          .join("")}
+        <p class="answer">Đáp án đúng: ${item.correct}</p>
+      `;
+        container.appendChild(div);
+      });
+
+      function checkAnswers() {
+        quizData.forEach((item, index) => {
+          const qName = "q" + (index + 1);
+          const selected = document.querySelector(
+            `input[name="${qName}"]:checked`
+          );
+          const div = document.getElementById(qName);
+          const answer = div.querySelector(".answer");
+          if (selected) {
+            if (selected.value === item.correct) {
+              div.classList.add("correct");
+              div.classList.remove("wrong");
+            } else {
+              div.classList.add("wrong");
+              div.classList.remove("correct");
+            }
+          } else {
+            div.classList.add("wrong");
+          }
+          answer.style.display = "block";
+        });
+      }
+
+      function resetQuiz() {
+        document
+          .querySelectorAll("input[type=radio]")
+          .forEach((r) => (r.checked = false));
+        document.querySelectorAll(".question").forEach((q) => {
+          q.classList.remove("correct", "wrong");
+          q.querySelector(".answer").style.display = "none";
+        });
+      }
+    </script>
+  </body>
+</html>

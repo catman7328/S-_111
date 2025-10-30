@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>
+      Bài 3: Sự hình thành Liên bang Cộng hòa Xã hội Chủ nghĩa Xô Viết
+    </title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background: #f7f9fb;
+        margin: 20px;
+        color: #222;
+      }
+      h2 {
+        text-align: center;
+        color: #2a4d69;
+      }
+      .question {
+        background: #fff;
+        padding: 15px;
+        margin: 12px 0;
+        border-radius: 8px;
+        box-shadow: 0 0 6px rgba(0, 0, 0, 0.1);
+      }
+      .correct {
+        background-color: #d4edda;
+      }
+      .wrong {
+        background-color: #f8d7da;
+      }
+      button {
+        padding: 10px 18px;
+        margin: 10px 5px;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        font-weight: bold;
+      }
+      #submitBtn {
+        background-color: #4caf50;
+        color: white;
+      }
+      #resetBtn {
+        background-color: #f44336;
+        color: white;
+      }
+      .answer {
+        margin-top: 5px;
+        font-style: italic;
+        color: #333;
+        display: none;
+      }
+      #gg {
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <h1 id="gg"><a href="../index.html">quay về</a></h1>
+    <h2>BÀI 3: Sự hình thành Liên bang Cộng hòa Xã hội Chủ nghĩa Xô Viết</h2>
+
+    <form id="quizForm">
+      <div id="quizContainer"></div>
+      <button type="button" id="submitBtn">Nộp bài</button>
+      <button type="button" id="resetBtn">Làm lại</button>
+    </form>
+
+    <script>
+      const quizData = [
+        {
+          q: "Câu 7. Cách mạng tháng Hai năm 1917 ở Nga đã lật đổ",
+          options: [
+            "A. chế độ quân chủ chuyên chế",
+            "B. chế độ độc tài quân sự",
+            "C. chính phủ tư sản lâm thời",
+            "D. Chính quyền Xô viết",
+          ],
+          correct: "A",
+        },
+        {
+          q: "Câu 8. Năm 1924, Hiến pháp đầu tiên của Liên Xô đã",
+          options: [
+            "A. hoàn thành quá trình thành lập nhà nước Liên Xô",
+            "B. kết thúc cuộc chiến tranh bảo vệ tổ quốc.",
+            "C. giải quyết yêu cầu hòa bình cho nhân dân",
+            "D. giải quyết vấn đề ruộng đất cho nông dân.",
+          ],
+          correct: "A",
+        },
+        {
+          q: "Câu 9. Sự ra đời của Liên bang Xô Viết (1922) đã",
+          options: [
+            "A. giải phóng các dân tộc trên toàn thế giới.",
+            "B. liên kết phong trào công nhân các nước tư bản.",
+            "C. tạo sức mạnh tổng hợp để xây dựng đất nước.",
+            "D. đập tan âm mưu xâm lược của các nước đế quốc.",
+          ],
+          correct: "C",
+        },
+        {
+          q: "Câu 11. Liên bang Xô viết được thành lập trong bối cảnh nào?",
+          options: [
+            "A. Các nước cộng hòa Xô viết phát triển không đồng đều.",
+            "B. Mâu thuẫn giữa các dân tộc Nga với chế độ Nga hoàng gay gắt.",
+            "C. Các nước cộng hòa Xô Viết có sự thống nhất về chính sách.",
+            "D. Mâu thuẫn giữa nước Nga với các nước cộng hòa Xô viết gay gắt.",
+          ],
+          correct: "A",
+        },
+        {
+          q: "Câu 13. Mục tiêu thành lập Liên bang Xô viết là",
+          options: [
+            "A. chống lại sự tấn công của 14 nước đế quốc.",
+            "B. thực hiện hiệu quả chính sách kinh tế mới.",
+            "C. hợp tác, giúp đỡ lẫn nhau để cùng phát triển.",
+            "D. chống lại cuộc tấn công của phát xít Đức.",
+          ],
+          correct: "C",
+        },
+        {
+          q: "Câu 15. Cách mạng tháng Mười Nga năm 1917 đã",
+          options: [
+            "A. lật đổ được Chính phủ tư sản lâm thời.",
+            "B. lật đổ được chế độ quân chủ chuyên chế.",
+            "C. đưa nước Nga ra khỏi Chiến tranh thế giới.",
+            "D. giải phóng các dân tộc khỏi chế độ tư bản.",
+          ],
+          correct: "A",
+        },
+        {
+          q: "Câu 16. Năm 1922, Đại hội lần thứ nhất các Xô viết toàn Liên bang đã thông qua",
+          options: [
+            "A. Tuyên ngôn thành lập Liên bang Xô viết.",
+            "B. Hiến pháp đầu tiên của Liên Xô.",
+            "C. Cương lĩnh xây dựng chủ nghĩa xã hội.",
+            "D. Báo cáo chính trị sửa đổi điều lệ Đảng.",
+          ],
+          correct: "A",
+        },
+        {
+          q: "Câu 18. Đối với Liên Xô, sự ra đời của Liên bang Xô viết không có ý nghĩa nào sau đây?",
+          options: [
+            "A. Thể hiện sức mạnh đoàn kết giữa các dân tộc.",
+            "B. Phù hợp với lợi ích chung của các dân tộc.",
+            "C. Tăng cường vị thế của Nhà nước Liên Xô.",
+            "D. Tạo tiền đề cho sự ra đời hệ thống XHCN.",
+          ],
+          correct: "D",
+        },
+        {
+          q: "Câu 19. Nội dung phản ánh đúng sự ra đời của Liên bang Xô viết năm 1922 là",
+          options: [
+            "A. Phù hợp với lợi ích chung của các dân tộc.",
+            "B. Phù hợp với xu thế phát triển chung của thế giới.",
+            "C. Đáp ứng nhiệm vụ cấp bách chống ngoại xâm.",
+            "D. Chưa phù hợp nguyện vọng các dân tộc.",
+          ],
+          correct: "A",
+        },
+        {
+          q: "Câu 20. Đối với thế giới, sự ra đời của Liên bang Xô viết không có ý nghĩa nào sau đây?",
+          options: [
+            "A. Tăng cường vị thế của Nhà nước Liên Xô.",
+            "B. Cổ vũ phong trào giải phóng dân tộc.",
+            "C. Để lại bài học về mô hình nhà nước.",
+            "D. Chứng minh học thuyết Mác – Lênin đúng đắn.",
+          ],
+          correct: "A",
+        },
+        {
+          q: "Câu 23. Liên bang Xô viết ra đời năm 1922 đã",
+          options: [
+            "A. đánh dấu hoàn thành đấu tranh chống thù trong giặc ngoài",
+            "B. chứng tỏ chế độ Nga hoàng hoàn toàn sụp đổ",
+            "C. xác lập chế độ XHCN trên toàn lãnh thổ Liên Xô",
+            "D. hoàn thành công cuộc xây dựng chế độ XHCN.",
+          ],
+          correct: "C",
+        },
+        {
+          q: "Câu 9. Chính quyền công nhân, nông dân, binh lính sau cách mạng tháng Hai gọi là",
+          options: [
+            "A. chính phủ tư sản lâm thời.",
+            "B. chính phủ dân tộc dân chủ.",
+            "C. các Xô viết.",
+            "D. chính phủ dân chủ cộng hòa.",
+          ],
+          correct: "C",
+        },
+        {
+          q: "Câu 10. Cách mạng tháng Hai năm 1917 ở Nga đã lật đổ",
+          options: [
+            "A. chế độ quân chủ chuyên chế.",
+            "B. chế độ độc tài quân sự.",
+            "C. chính phủ tư sản lâm thời.",
+            "D. Chính quyền Xô viết.",
+          ],
+          correct: "A",
+        },
+        {
+          q: "Câu 11. Tình hình nước Nga và các nước Cộng hòa Xô viết đồng minh sau Cách mạng tháng Mười",
+          options: [
+            "A. Có sự đồng đều về kinh tế, văn hoá.",
+            "B. Tồn tại sự bất bình đẳng về chính trị.",
+            "C. Bị các nước tư bản âm mưu chống phá.",
+            "D. Nông nghiệp lạc hậu.",
+          ],
+          correct: "A",
+        },
+        {
+          q: "Câu 12. Nước nào sau đây không tham gia sáng lập Liên bang Xô viết?",
+          options: [
+            "A. Ba Lan.",
+            "B. Ucraina.",
+            "C. Bêlôrútxia.",
+            "D. Ngoại Cápcadơ.",
+          ],
+          correct: "A",
+        },
+        {
+          q: "Câu 9. Sau Cách mạng tháng Hai năm 1917, giai cấp tư sản Nga thành lập",
+          options: [
+            "A. Chính phủ tư sản lâm thời.",
+            "B. Chính phủ dân tộc dân chủ.",
+            "C. Chính quyền Xô viết.",
+            "D. Chính phủ dân chủ cộng hòa.",
+          ],
+          correct: "A",
+        },
+        {
+          q: "Câu 10. Cách mạng tháng Hai năm 1917 ở Nga đã lật đổ",
+          options: [
+            "A. chế độ Nga hoàng.",
+            "B. chế độ độc tài quân sự.",
+            "C. chính phủ tư sản lâm thời.",
+            "D. Chính quyền Xô viết.",
+          ],
+          correct: "A",
+        },
+        {
+          q: "Câu 11. Tình hình nước Nga và các nước Cộng hòa Xô viết đồng minh từ sau Cách mạng tháng Mười",
+          options: [
+            "A. Có sự đồng đều về kinh tế, văn hoá.",
+            "B. Tồn tại sự bất bình đẳng về chính trị.",
+            "C. Bị các nước tư bản âm mưu chống phá.",
+            "D. Vẫn trong tình trạng nông nghiệp lạc hậu.",
+          ],
+          correct: "C",
+        },
+        {
+          q: "Câu 12. Nước nào sau đây tham gia sáng lập Liên bang Xô viết?",
+          options: ["A. Latvia.", "B. Ucraina.", "C. Estonia.", "D. Moldavia."],
+          correct: "B",
+        },
+      ];
+
+      const container = document.getElementById("quizContainer");
+      quizData.forEach((item, i) => {
+        const div = document.createElement("div");
+        div.className = "question";
+        div.innerHTML = `
+        <p><strong>${item.q}</strong></p>
+        ${item.options
+          .map(
+            (opt) => `
+          <label>
+            <input type="radio" name="q${i}" value="${opt[0]}"> ${opt}
+          </label><br>`
+          )
+          .join("")}
+        <div class="answer" id="ans${i}">Đáp án đúng: ${item.correct}</div>
+      `;
+        container.appendChild(div);
+      });
+
+      document.getElementById("submitBtn").onclick = function () {
+        const questions = document.querySelectorAll(".question");
+        let score = 0;
+        quizData.forEach((item, i) => {
+          const selected = document.querySelector(
+            `input[name="q${i}"]:checked`
+          );
+          const ansDiv = document.getElementById(`ans${i}`);
+          ansDiv.style.display = "block";
+          if (selected) {
+            if (selected.value === item.correct) {
+              questions[i].classList.add("correct");
+              score++;
+            } else {
+              questions[i].classList.add("wrong");
+            }
+          } else {
+            questions[i].classList.add("wrong");
+          }
+        });
+        alert(`Bạn làm đúng ${score}/${quizData.length} câu.`);
+      };
+
+      document.getElementById("resetBtn").onclick = () => location.reload();
+    </script>
+  </body>
+</html>
