@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Trắc nghiệm: Một số vấn đề chung về cách mạng tư sản</title>
+    <link
+      rel="shortcut icon"
+      href="./2a14cb61-8b7f-493a-bb64-74dfe9c5afeb.jpg"
+      type="image/x-icon"
+    />
+    <style>
+      :root {
+        --bg: #f4f7fb;
+        --card: #fff;
+        --accent: #2563eb;
+        --good: #e6ffed;
+        --bad: #ffe6e6;
+        --border: #e2e8f0;
+        font-family: "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      }
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: #111;
+        padding: 24px;
+      }
+      .container {
+        max-width: 980px;
+        margin: 0 auto;
+      }
+      header {
+        display: flex;
+        gap: 16px;
+        align-items: center;
+        margin-bottom: 18px;
+      }
+      header h1 {
+        font-size: 20px;
+        margin: 0;
+      }
+      .card {
+        background: var(--card);
+        border-radius: 12px;
+        padding: 18px;
+        box-shadow: 0 6px 18px rgba(15, 23, 42, 0.06);
+        border: 1px solid var(--border);
+      }
+      .meta {
+        color: #475569;
+        font-size: 13px;
+        margin-bottom: 12px;
+      }
+      .q {
+        padding: 12px;
+        border-radius: 8px;
+        margin-bottom: 10px;
+        border: 1px dashed transparent;
+      }
+      .q h3 {
+        margin: 0 0 10px 0;
+        font-size: 15px;
+      }
+      .options label {
+        display: block;
+        padding: 8px;
+        border-radius: 8px;
+        cursor: pointer;
+        border: 1px solid transparent;
+        margin-bottom: 6px;
+      }
+      .options input {
+        margin-right: 10px;
+      }
+      .controls {
+        display: flex;
+        gap: 8px;
+        margin-top: 12px;
+      }
+      button {
+        background: var(--accent);
+        color: white;
+        border: 0;
+        padding: 10px 14px;
+        border-radius: 8px;
+        cursor: pointer;
+      }
+      button.secondary {
+        background: #64748b;
+      }
+      .result {
+        margin-top: 14px;
+        font-weight: 600;
+      }
+      .correct {
+        background: var(--good) !important;
+        border-color: #14b8a6 !important;
+      }
+      .incorrect {
+        background: var(--bad) !important;
+        border-color: #ef4444 !important;
+        opacity: 0.95;
+      }
+      .answer-note {
+        font-size: 13px;
+        color: #0f172a;
+        margin-top: 6px;
+      }
+      .small {
+        font-size: 13px;
+        color: #334155;
+      }
+      @media (max-width: 600px) {
+        header {
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 6px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <h1>Bài 1: Một số vấn đề chung về cách mạng tư sản — Bài kiểm tra</h1>
+        <div class="small">
+          Chọn 1 đáp án cho mỗi câu. Nhấn "Nộp bài" để xem kết quả.
+        </div>
+      </header>
+
+      <div class="card" id="quizCard">
+        <div class="meta">
+          Tổng số câu: <span id="totalQs">36</span>.
+          <span id="timeHint" class="small"></span>
+        </div>
+
+        <form id="quizForm">
+          <!-- QUESTIONS WILL BE RENDERED HERE -->
+        </form>
+
+        <div class="controls">
+          <button id="submitBtn" type="button">Nộp bài</button>
+          <button id="resetBtn" type="button" class="secondary">Làm lại</button>
+          <button id="showKeyBtn" type="button" class="secondary">
+            Hiện đáp án
+          </button>
+        </div>
+
+        <div id="result" class="result" aria-live="polite"></div>
+        <div id="scoreBreakdown" class="small"></div>
+      </div>
+    </div>
+
+    <script>
+      /*
+  Danh sách câu hỏi (36) và lựa chọn.
+  Tôi đã giữ nguyên nội dung câu và phương án như bạn gửi trong tin nhắn.
+  Mảng 'answers' chứa đáp án đúng (theo chuỗi bạn gửi): 
+  c a b b c a a a b c a c a a a c d c a a a d d a d d d b d b a a b c a a
+*/
+      const quizData = [
+        {
+          q: "Câu 1. Đầu thế kỉ XVII, ngành công nghiệp phát triển nhất ở nước Anh là",
+          opts: [
+            "A. luyện kim.",
+            "B. máy hơi nước.",
+            "C. len, dạ.",
+            "D. chế tạo máy móc.",
+          ],
+        },
+        {
+          q: "Câu 2. Đẳng cấp thứ ba trong xã hội Pháp trước cách mạng gồm những lực lượng nào?",
+          opts: [
+            "A. Tư sản, nông dân, bình dân thành thị.",
+            "B. Quý tộc, nông dân, tăng lữ, thợ thủ công.",
+            "C. Tăng lữ, quý tộc và tư sản, nông dân.",
+            "D. Vua, quan lại, tăng lữ, bình dân thành thị",
+          ],
+        },
+        {
+          q: "Câu 3. Đến giữa thế kỉ XVIII, miền Bắc của 13 bang thuộc địa Anh ở Bắc Mĩ phổ biến phát triển",
+          opts: [
+            "A. kinh tế đồn điền.",
+            "B. công thương nghiệp.",
+            "C. dệt và làm gốm.",
+            "D. phường hội thủ công.",
+          ],
+        },
+        {
+          q: "Câu 4. Đến giữa thế kỉ XVIII, miền Nam của 13 bang thuộc địa Anh ở Bắc Mĩ phổ biến phát triển",
+          opts: [
+            "A. công thương nghiệp.",
+            "B. đồn điền, trang trại.",
+            "C. luyện kim và đóng tàu.",
+            "D. khai thác dầu mỏ.",
+          ],
+        },
+        {
+          q: "Câu 5. Từ thế kỉ XVII, nền nông nghiệp Anh có đặc điểm nổi bật nào sau đây?",
+          opts: [
+            "A. Lạc hậu, manh mún, công cụ lao động thô sơ",
+            "B. Bị cạnh tranh gay gắt bởi nông nghiệp Pháp.",
+            "C. Phương thức kinh doanh mới thâm nhập mạnh",
+            "D. Phát triển mạnh mẽ trong ngành đồn điền cao su.",
+          ],
+        },
+        {
+          q: "Câu 6. Mục tiêu chung của các cuộc cách mạng tư sản thế kỉ XVI- XVIII là",
+          opts: [
+            "A. lật đổ chế đổ phong kiến, thực dân cùng tàn tích của nó.",
+            "B. lật đổ chế độ phong kiến, cổ đại cùng tàn tích của nó.",
+            "C. tạo điều kiện cho sự phát triển của chế độ phong kiến.",
+            "D. mở đường cho sự phát triển của chủ nghĩa xã hội.",
+          ],
+        },
+        {
+          q: "Câu 7. Các cuộc cách mạng tư sản thế kỉ XVI - XVIII có hai nhiệm vụ cơ bản là",
+          opts: [
+            "A. dân tộc và dân chủ.",
+            "B. dân tộc và dân sinh.",
+            "C. độc lập và tự do.",
+            "D. dân chủ và dân quyền.",
+          ],
+        },
+        {
+          q: "Câu 8. Một trong những lực lượng lãnh đạo chủ yếu của các cuộc cách mạng tư sản thế kỉ XVI – XVIII là giai cấp",
+          opts: ["A. tư sản.", "B. công nhân.", "C. nông dân.", "D. địa chủ."],
+        },
+        {
+          q: "Câu 9. Lãnh đạo của cuộc cách mạng tư sản Anh thế kỉ XVII là",
+          opts: [
+            "A. tư sản và chủ nô.",
+            "B. tư sản và quý tộc mới.",
+            "C. tăng lữ và quý tộc.",
+            "D. Chủ nô và quý tộc",
+          ],
+        },
+        {
+          q: "Câu 10. “Lật đổ chế độ phong kiến đứng đầu là vua Sác- lơ I, thiết lập nền thống trị của giai cấp tư sản và quý tộc mới, mở đường cho sự phát triển của chủ nghĩa tư bản” là mục tiêu của cuộc cách mạng tư sản ở quốc gia nào sau đây?",
+          opts: ["A. Nga", "B. Pháp.", "C. Anh.", "D. Bắc Mỹ."],
+        },
+        {
+          q: "Câu 11. Một trong những ý nghĩa của cách mạng tư sản Pháp cuối thế kỷ XVIII là",
+          opts: [
+            "A. lật đổ và xóa bỏ mọi tàn dư của chế độ phong kiến.",
+            "B. thúc đẩy phong trào đấu tranh giành độc lập Mĩ Latinh.",
+            "C. lật đổ chế độ quân chủ chuyên chế do vua Sác – lơ I đứng đầu",
+            "D. lật đổ sự thống trị của thực dân Anh, giành độc lập dân tộc.",
+          ],
+        },
+        {
+          q: "Câu 12. Cách mạng tư sản Anh thế kỉ XVII đã",
+          opts: [
+            "A. lật đổ chế độ thuộc địa nửa phong kiến",
+            "B. thiết lập chế độ dân chủ cộng hòa ở Anh.",
+            "C. thiết lập chế độ quân chủ lập hiến ở Anh.",
+            "D. giành độc lập dân tộc từ tay thực dân Pháp.",
+          ],
+        },
+        {
+          q: "Câu 13. Mức độ thắng lợi của các cuộc cách mạng tư sản thời cận đại khác nhau là do",
+          opts: [
+            "A. điều kiện lịch sử.",
+            "B. giai cấp lãnh đạo.",
+            "C. động lực cách mạng.",
+            "D. nhiệm vụ cách mạng.",
+          ],
+        },
+        {
+          q: "Câu 14. Đặc điểm nổi bật của tình hình chính trị nước Anh và Pháp trước khi bùng nổ cách mạng tư sản là",
+          opts: [
+            "A. tồn tại chế độ quân chủ chuyên chế.",
+            "B. là thuộc địa của chủ nghĩa thực dân.",
+            "C. xuất hiện kinh tế tư bản chủ nghĩa.",
+            "D. xuất hiện trào lưu triết học ánh sáng.",
+          ],
+        },
+        {
+          q: "Câu 15. Nội dung nào sau đây không phải là đặc điểm tình hình nước Pháp cuối thế kỉ XVIII?",
+          opts: [
+            "A. Lấy Thanh giáo làm ngọn cờ tư tưởng.",
+            "B. Xuất hiện trào lưu Triết học ánh sáng.",
+            "C. Xã hội phân chia thành các đẳng cấp.",
+            "D. Vua Lu-I XVI có quyền lực tuyệt đối.",
+          ],
+        },
+        {
+          q: "Câu 16. Đặc điểm nổi bật về kinh tế của 13 thuộc địa Anh ở Bắc Mĩ giữa thế kỉ XVIII là",
+          opts: [
+            "A. miền Nam chủ yếu phát triển kinh tế công nghiệp.",
+            "B. miền Bắc chủ yếu phát triển kinh tế thương nghiệp.",
+            "C. kinh tế phát triển theo con đường tư bản chủ nghĩa.",
+            "D. phương thức sản xuất tư bản chủ nghĩa chưa thâm nhập",
+          ],
+        },
+        {
+          q: "Câu 17. Nội dung nào sau đây không phải là mục tiêu của các cuộc cách mạng tư sản thế kỉ XVI - XVIII?",
+          opts: [
+            "A. Lật đổ chế độ phong kiến, thực dân cùng tàn tích của nó.",
+            "B. Tạo điều kiện cho sự phát triển của kinh tế tư bản chủ nghĩa.",
+            "C. Thiết lập nền thống trị của giai cấp tư sản và liên minh của họ",
+            "D. Mở ra thời đại thời đại thắng lợi của chế độ xã hội chủ nghĩa",
+          ],
+        },
+        {
+          q: "Câu 18. Nội dung nào sau đây là mục tiêu của cuộc cách mạng tư sản Pháp cuối thế kỉ XVIII?",
+          opts: [
+            "A. Lật đổ chế độ phong kiến đứng đầu vua Sác- lơ I.",
+            "B. Lật đổ ách thống trị của thực dân Anh, giành độc lập",
+            "C. Lật đổ chế độ phong kiến đứng đầu vua Lu- i XVI.",
+            "D. Thiết lập chính quyền của giai cấp tư sản và chủ nô",
+          ],
+        },
+        {
+          q: "Câu 19. (Câu 22 trong đề gốc) Nhận xét nào sau đây là đúng về ý nghĩa cách mạng tư sản Pháp cuối thế kỉ XVIII?",
+          opts: [
+            "A. Lật đổ và xóa bỏ mọi tàn dư của chế độ phong kiến.",
+            "B. Tạo điều kiện đầy đủ nhất cho kinh tế tư bản phát triển.",
+            "C. Thúc đẩy phong trào giải phóng dân tộc ở Mĩ Latinh",
+            "D. Thiết lập chế độ quân chủ lập hiến tiến bộ ở Pháp",
+          ],
+        },
+        {
+          q: "Câu 20. (Câu 23 trong đề gốc) Các cuộc cách mạng tư sản thời cận đại đều",
+          opts: [
+            "A. dẫn đến xác lập quan hệ sản xuất tư bản chủ nghĩa.",
+            "B. tạo ra một nền dân chủ, tự do thực sự, rộng rãi",
+            "C. lật đổ chế độ phong kiến, thiết lập nền cộng hòa.",
+            "D. lật đổ chế độ thực dân, thiết lập nền cộng hòa.",
+          ],
+        },
+        {
+          q: "Câu 21. (Câu 24) Trước khi cách mạng tư sản bùng nổ, cả Anh và Pháp đều",
+          opts: [
+            "A. theo thể chế quân chủ chuyên chế",
+            "B. theo thể chế quân chủ lập hiến",
+            "C. là thuộc địa của thực dân bên ngoài",
+            "D. có nền nông nghiệp lạc hậu, manh mún",
+          ],
+        },
+        {
+          q: "Câu 22. (Câu 25) Nội dung nào phản ánh không đúng về nhiệm vụ dân chủ trong các cuộc cách mạng tư sản thời cận đại?",
+          opts: [
+            "A. Xóa bỏ chế độ phong kiến chuyên chế.",
+            "B. Xác lập nền dân chủ tư sản.",
+            "C. Đem lại quyền tự do chính trị cho người dân.",
+            "D. Thống nhất thị trường dân tộc.",
+          ],
+        },
+        {
+          q: "Câu 23. (Câu 26) Ở nước Anh, do sự phát triển của ngành công nghiệp len dạ làm cho nghề nuôi cừu trở nên có lợi nhất. Nhiều quý tộc chuyển hướng kinh doanh theo phương thức tư bản chủ nghĩa, giàu lên nhanh chóng, trở thành tầng lớp",
+          opts: [
+            "A. tư sản",
+            "B. chủ nô",
+            "C. quý tộc phong kiến",
+            "D. quý tộc mới",
+          ],
+        },
+        {
+          q: "Câu 24. (Câu 27) Sự phát triển của nền kinh tế đã làm biến đổi xã hội Tây Âu và Bắc Mỹ, xuất hiện các giai cấp, tầng lớp mới đại diện cho phương thức sản xuất",
+          opts: [
+            "A. tư bản chủ nghĩa.",
+            "B. phong kiến.",
+            "C. xã hội chủ nghĩa.",
+            "D. chiếm hữu nô lệ.",
+          ],
+        },
+        {
+          q: "Câu 25. (Câu 28) Một trong những nhiệm vụ của các cuộc cách mạng tư sản thế kỉ XVII - XVIII là",
+          opts: [
+            "A. đưa giai cấp công nhân lên nắm quyền.",
+            "B. xóa bỏ triệt để mâu thuẫn trong xã hội.",
+            "C. xác lập sự thống trị của chủ nghĩa thực dân.",
+            "D. xóa bỏ tình trạng phong kiến cát cứ.",
+          ],
+        },
+        {
+          q: "Câu 26. (Câu 29) Lãnh đạo các cuộc cách mạng tư sản từ thế kỉ XVII đến thế kỉ XVIII không bao gồm lực lượng nào sau đây?",
+          opts: [
+            "A. tư sản.",
+            "B. quý tộc mới.",
+            "C. chủ nô.",
+            "D. công nhân.",
+          ],
+        },
+        {
+          q: "Câu 27. (Câu 30) Nội dung nào sau đây là tiền đề về kinh tế dẫn đến sự bùng nổ và thắng lợi của các cuộc cách mạng tư sản thế kỉ XVII – XVIII?",
+          opts: [
+            "A. Quan hệ sản xuất tư bản chủ nghĩa thay thế hoàn toàn quan hệ phong kiến.",
+            "B. Triết học Ánh sáng ra đời, thức tỉnh, dọn đường cho quần chúng đấu tranh.",
+            "C. Giai cấp tư sản và đồng minh có thế lực rất lớn cả về kinh tế và chính trị.",
+            "D. Kinh tế tư bản chủ nghĩa ra đời và phát triển trong lòng chế độ phong kiến.",
+          ],
+        },
+        {
+          q: "Câu 28. (Câu 32) “Lật đổ chế độ phong kiến đứng đầu là vua Lu – I XVI, thiết lập nền thống trị của giai cấp tư sản” là mục tiêu của cách mạng tư sản nào sau đây?",
+          opts: [
+            "A. Đấu tranh thống nhất nước Đức",
+            "B. Cách mạng tư sản Pháp",
+            "C. Cách mạng tư sản Anh.",
+            "D. Chiến tranh giành độc lập của 13 thuộc địa Anh ở Bắc Mỹ.",
+          ],
+        },
+        /* Sau đây là các câu bị lặp trong đề gốc — tôi giữ nguyên văn như bạn gửi */
+        {
+          q: "Câu 29. (lặp) Một trong những nhiệm vụ dân tộc của các cuộc cách mạng tư sản thời cận đại là",
+          opts: [
+            "A. xóa bỏ chế độ phong kiến chuyên chế.",
+            "B. xác lập nền dân chủ tư sản.",
+            "C. mỗi người dân đều có quyền tự do.",
+            "D. đánh đuổi chủ nghĩa thực dân.",
+          ],
+        },
+        {
+          q: "Câu 30. (lặp) Lãnh đạo của cuộc cách mạng tư sản Anh thế kỉ XVII là",
+          opts: [
+            "A. tư sản và chủ nô.",
+            "B. tư sản và quý tộc mới.",
+            "C. tăng lữ và quý tộc.",
+            "D. chủ nô và quý tộc",
+          ],
+        },
+        {
+          q: "Câu 31. (lặp) Đặc điểm nổi bật của tình hình chính trị nước Anh và Pháp trước khi bùng nổ cách mạng tư sản là",
+          opts: [
+            "A. tồn tại chế độ quân chủ chuyên chế.",
+            "B. là thuộc địa của chủ nghĩa thực dân.",
+            "C. xuất hiện kinh tế tư bản chủ nghĩa.",
+            "D. xuất hiện trào lưu triết học ánh sáng.",
+          ],
+        },
+        {
+          q: "Câu 32. (lặp) Một trong những điểm chung của các cuộc cách mạng tư sản thời cận đại là",
+          opts: [
+            "A. mở đường cho chủ nghĩa tư bản phát triển.",
+            "B. do tư sản và chủ nô lãnh đạo.",
+            "C. xóa bỏ chế độ phong kiến và nô lệ.",
+            "D. diễn ra dưới hình thức nội chiến.",
+          ],
+        },
+        {
+          q: "Câu 33. (lặp) Một trong những nhiệm vụ dân chủ của các cuộc cách mạng tư sản thời cận đại là",
+          opts: [
+            "A. giải phóng dân tộc.",
+            "B. xác lập nền dân chủ tư sản.",
+            "C. thống nhất thị trường dân tộc.",
+            "D. đánh đuổi chủ nghĩa thực dân.",
+          ],
+        },
+        {
+          q: "Câu 34. (lặp) Cách mạng tư sản Anh thế kỉ XVII đã",
+          opts: [
+            "A. lật đổ chế độ thuộc địa nửa phong kiến.",
+            "B. thiết lập chế độ dân chủ cộng hòa.",
+            "C. thiết lập chế độ quân chủ lập hiến.",
+            "D. giành độc lập dân tộc từ tay thực dân.",
+          ],
+        },
+        {
+          q: "Câu 35. (lặp) Trước khi cách mạng tư sản bùng nổ, cả Anh và Pháp đều",
+          opts: [
+            "A. theo thể chế quân chủ chuyên chế.",
+            "B. theo thể chế quân chủ lập hiến.",
+            "C. là thuộc địa của thực dân bên ngoài.",
+            "D. có nền nông nghiệp lạc hậu, manh mún.",
+          ],
+        },
+        {
+          q: "Câu 36. (lặp) Một trong những điểm chung của các cuộc cách mạng tư sản thời cận đại là",
+          opts: [
+            "A. mở đường cho chủ nghĩa tư bản phát triển.",
+            "B. do tư sản và chủ nô lãnh đạo.",
+            "C. xóa bỏ chế độ phong kiến và nô lệ.",
+            "D. diễn ra dưới hình thức nội chiến.",
+          ],
+        },
+      ];
+
+      // Đáp án đúng theo chuỗi bạn cung cấp (chuyển thành chữ hoa để khớp)
+      const answers =
+        "c a b b c a a a b c a c a a a c d c a a a d d a d d d b d b a a b c a a"
+          .toUpperCase()
+          .split(" ");
+
+      if (answers.length !== quizData.length) {
+        console.warn(
+          "Số lượng đáp án không khớp số câu hỏi.",
+          answers.length,
+          quizData.length
+        );
+      }
+
+      // Render form
+      const form = document.getElementById("quizForm");
+      quizData.forEach((item, idx) => {
+        const qDiv = document.createElement("div");
+        qDiv.className = "q";
+        qDiv.id = "q" + (idx + 1);
+        const h = document.createElement("h3");
+        h.innerText = `${idx + 1}. ${item.q}`;
+        qDiv.appendChild(h);
+
+        const optsDiv = document.createElement("div");
+        optsDiv.className = "options";
+        item.opts.forEach((optText, j) => {
+          const id = `q${idx + 1}_opt${j}`;
+          const label = document.createElement("label");
+          label.htmlFor = id;
+          label.innerHTML = `<input type="radio" name="q${
+            idx + 1
+          }" id="${id}" value="${String.fromCharCode(65 + j)}"> ${optText}`;
+          optsDiv.appendChild(label);
+        });
+
+        // place for showing answer note after submit
+        const note = document.createElement("div");
+        note.className = "answer-note";
+        note.id = `note${idx + 1}`;
+        qDiv.appendChild(optsDiv);
+        qDiv.appendChild(note);
+        form.appendChild(qDiv);
+      });
+
+      // Button behavior
+      const submitBtn = document.getElementById("submitBtn");
+      const resetBtn = document.getElementById("resetBtn");
+      const resultDiv = document.getElementById("result");
+      const breakdown = document.getElementById("scoreBreakdown");
+      const showKeyBtn = document.getElementById("showKeyBtn");
+
+      function grade() {
+        let correct = 0;
+        quizData.forEach((_, idx) => {
+          const qnum = idx + 1;
+          const selected = document.querySelector(
+            `input[name="q${qnum}"]:checked`
+          );
+          const qDiv = document.getElementById("q" + qnum);
+          const note = document.getElementById("note" + qnum);
+          qDiv.classList.remove("correct", "incorrect");
+          note.innerText = "";
+          if (selected) {
+            const val = selected.value; // 'A'..'D'
+            const right = answers[idx] || "";
+            if (val === right) {
+              correct++;
+              qDiv.classList.add("correct");
+              note.innerText = `Đúng. Đáp án: ${right}.`;
+            } else {
+              qDiv.classList.add("incorrect");
+              note.innerText = `Sai. Đáp án đúng: ${
+                right || "?"
+              }. Bạn chọn: ${val}.`;
+            }
+          } else {
+            qDiv.classList.add("incorrect");
+            note.innerText = `Bạn chưa chọn đáp án. Đáp án đúng: ${
+              answers[idx] || "?"
+            }.`;
+          }
+        });
+
+        const total = quizData.length;
+        resultDiv.innerText = `Bạn được ${correct} / ${total} điểm. (${Math.round(
+          (correct / total) * 100
+        )}%)`;
+        breakdown.innerHTML = `Đúng: <strong>${correct}</strong> &nbsp;|&nbsp; Sai/Chưa chọn: <strong>${
+          total - correct
+        }</strong>`;
+        // scroll to result
+        resultDiv.scrollIntoView({ behavior: "smooth", block: "nearest" });
+      }
+
+      function resetForm() {
+        document.getElementById("quizForm").reset();
+        // clear classes and notes
+        quizData.forEach((_, idx) => {
+          const qDiv = document.getElementById("q" + (idx + 1));
+          const note = document.getElementById("note" + (idx + 1));
+          qDiv.classList.remove("correct", "incorrect");
+          note.innerText = "";
+        });
+        resultDiv.innerText = "";
+        breakdown.innerText = "";
+      }
+
+      function showKey() {
+        // toggle showing key in notes without coloring
+        let anyShown = document.querySelector("[data-keyshown='1']");
+        if (anyShown) {
+          // hide all
+          document
+            .querySelectorAll("[data-keyshown='1']")
+            .forEach((el) => el.removeAttribute("data-keyshown"));
+          showKeyBtn.innerText = "Hiện đáp án";
+          quizData.forEach((_, idx) => {
+            const note = document.getElementById("note" + (idx + 1));
+            if (note && note.dataset.autonote !== "1") note.innerText = "";
+          });
+        } else {
+          showKeyBtn.innerText = "Ẩn đáp án";
+          quizData.forEach((_, idx) => {
+            const note = document.getElementById("note" + (idx + 1));
+            note.dataset.keyshown = "1";
+            note.dataset.autonote = "1";
+            note.innerText = `Đáp án: ${answers[idx] || "?"}.`;
+          });
+        }
+      }
+
+      // Events
+      submitBtn.addEventListener("click", grade);
+      resetBtn.addEventListener("click", resetForm);
+      showKeyBtn.addEventListener("click", showKey);
+
+      // small UX: allow Enter key to submit when focused inside form
+      document
+        .getElementById("quizForm")
+        .addEventListener("keydown", function (e) {
+          if (e.key === "Enter") {
+            e.preventDefault();
+            grade();
+          }
+        });
+    </script>
+  </body>
+</html>
